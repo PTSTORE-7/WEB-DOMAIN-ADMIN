@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>PT STORE | ADMIN PANEL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css?v=20260507">
+  <link rel="icon" type="image/png" sizes="512x512" href="logo.png">
+</head>
+<body class="admin-body">
+
+  <!-- PIN SCREEN -->
+  <div id="pinScreen" class="pin-screen">
+    <div class="pin-card">
+      <div class="pin-icon-wrap"><i class="fas fa-lock"></i></div>
+      <h2>Admin Panel</h2>
+      <p>Masukkan PIN untuk mengakses</p>
+      <div class="pin-input-group"><input type="password" id="pinInput" placeholder="******" maxlength="6" autofocus></div>
+      <div class="pin-error" id="pinError"><i class="fas fa-exclamation-circle"></i> PIN salah!</div>
+      <button class="pin-btn" id="pinSubmitBtn"><i class="fas fa-arrow-right"></i> Masuk</button>
+    </div>
+  </div>
+
+  <!-- ADMIN MAIN SCREEN -->
+  <div id="adminMainScreen" class="hidden">
+    <div class="admin-layout">
+      <!-- SIDEBAR -->
+      <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+          <i class="fas fa-user-shield"></i>
+          <span>Admin Panel</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="sidebar-link active" data-menu="verification">
+            <i class="fas fa-check-circle"></i> Verifikasi
+          </a>
+          <a href="#" class="sidebar-link" data-menu="pricing">
+            <i class="fas fa-tags"></i> Pricing Table
+          </a>
+          <a href="#" class="sidebar-link" data-menu="promo">
+            <i class="fas fa-ticket-alt"></i> Kode Promo
+          </a>
+          <a href="#" class="sidebar-link" data-menu="all">
+            <i class="fas fa-list"></i> Semua Pembelian
+          </a>
+          <a href="#" class="sidebar-link" data-menu="counter">
+            <i class="fas fa-chart-bar"></i> Counter Domain
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <button class="logout-btn" onclick="logoutAdmin()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="admin-content">
+        <!-- MENU: VERIFIKASI -->
+        <div class="menu-content active" id="menu-verification">
+          <div class="stats-row">
+            <div class="stat-box"><span class="stat-label">Total</span><span class="stat-number" id="adminStatTotal">0</span></div>
+            <div class="stat-box"><span class="stat-label">Pending</span><span class="stat-number warning" id="adminStatPending">0</span></div>
+            <div class="stat-box"><span class="stat-label">Aktif</span><span class="stat-number success" id="adminStatActive">0</span></div>
+          </div>
+          <div class="section-card">
+            <div class="section-title"><i class="fas fa-clock"></i> Menunggu Verifikasi</div>
+            <div id="adminPendingContainer"></div>
+          </div>
+        </div>
+
+        <!-- MENU: PRICING TABLE -->
+        <div class="menu-content" id="menu-pricing">
+          <div class="section-card">
+            <div class="section-title"><i class="fas fa-tags"></i> Kelola Pricing Table</div>
+            <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+              <input type="text" id="newTld" placeholder="TLD (.my.id)" style="flex:1;min-width:120px;padding:10px;border:2px solid #e2e8f0;border-radius:10px;font-family:inherit;outline:none;">
+              <input type="number" id="newPrice" placeholder="Harga (Rp)" style="flex:1;min-width:120px;padding:10px;border:2px solid #e2e8f0;border-radius:10px;font-family:inherit;outline:none;">
+              <input type="text" id="newFeatures" placeholder="Fitur (pisah koma)" style="flex:2;min-width:180px;padding:10px;border:2px solid #e2e8f0;border-radius:10px;font-family:inherit;outline:none;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;white-space:nowrap;">
+                <input type="checkbox" id="newPopular"> ⭐ Populer
+              </label>
+              <button class="btn-verify" onclick="addPricing()"><i class="fas fa-plus"></i> Tambah</button>
+            </div>
+            <div id="pricingContainer"></div>
+          </div>
+        </div>
+
+        <!-- MENU: KODE PROMO -->
+        <div class="menu-content" id="menu-promo">
+          <div class="section-card">
+            <div class="section-title"><i class="fas fa-ticket-alt"></i> Manajemen Kode Promo</div>
+            <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+              <input type="text" id="newPromoCode" placeholder="Kode (BCSJDB)" style="flex:1;min-width:100px;padding:10px;border:2px solid #e2e8f0;border-radius:10px;font-family:inherit;outline:none;text-transform:uppercase;">
+              <input type="number" id="newPromoDiscount" placeholder="Diskon (Rp)" style="flex:1;min-width:110px;padding:10px;border:2px solid #e2e8f0;border-radius:10px;font-family:inherit;outline:none;">
+              <input type="number" id="newPromoMaxUse" placeholder="Max Pakai (0=unlimited)" value="1" style="flex:1;min-width:100px;padding:10px;border:2px solid #e2e8f0;border-radius:10px;font-family:inherit;outline:none;">
+              <button class="btn-verify" onclick="addPromo()"><i class="fas fa-plus"></i> Tambah</button>
+            </div>
+            <div id="promoContainer"></div>
+          </div>
+        </div>
+
+        <!-- MENU: SEMUA PEMBELIAN -->
+        <div class="menu-content" id="menu-all">
+          <div class="section-card">
+            <div class="section-title"><i class="fas fa-list"></i> Semua Pembelian</div>
+            <div id="adminAllContainer"></div>
+          </div>
+        </div>
+
+        <!-- MENU: COUNTER DOMAIN -->
+        <div class="menu-content" id="menu-counter">
+          <div class="stats-row">
+            <div class="stat-box">
+              <span class="stat-label">Pembelian Otomatis</span>
+              <span class="stat-number" id="counterAuto">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Nilai Manual</span>
+              <span class="stat-number" id="counterManual" style="color:var(--text-dark);">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Total Ditampilkan</span>
+              <span class="stat-number success" id="counterTotal">0</span>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title">
+              <i class="fas fa-sliders-h"></i> Atur Nilai Manual Counter
+            </div>
+            
+            <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:20px;">
+              <div style="flex:1;min-width:200px;">
+                <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text-dark);margin-bottom:6px;">
+                  Nilai Tambahan Manual
+                </label>
+                <input type="number" id="manualCounterInput" placeholder="0" value="0"
+                       style="width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:12px;font-family:inherit;font-size:1rem;outline:none;">
+                <small style="color:var(--text-soft);font-size:0.75rem;margin-top:4px;display:block;">
+                  Gunakan angka negatif untuk mengurangi (contoh: -5)
+                </small>
+              </div>
+              
+              <button class="btn-verify" onclick="updateManualCounter()" style="height:44px;">
+                <i class="fas fa-save"></i> Simpan
+              </button>
+              
+              <button class="btn-reject" onclick="resetManualCounter()" style="height:44px;background:#f59e0b;">
+                <i class="fas fa-undo"></i> Reset ke 0
+              </button>
+            </div>
+
+            <!-- Quick Presets -->
+            <div style="margin-bottom:16px;">
+              <label style="display:block;font-size:0.85rem;font-weight:600;color:var(--text-dark);margin-bottom:8px;">
+                <i class="fas fa-bolt" style="color:var(--warning);"></i> Quick Preset
+              </label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button onclick="setManualCounter(5)" class="btn-preset">+5</button>
+                <button onclick="setManualCounter(10)" class="btn-preset">+10</button>
+                <button onclick="setManualCounter(25)" class="btn-preset">+25</button>
+                <button onclick="setManualCounter(50)" class="btn-preset">+50</button>
+                <button onclick="setManualCounter(100)" class="btn-preset">+100</button>
+                <button onclick="setManualCounter(-5)" class="btn-preset danger">-5</button>
+                <button onclick="setManualCounter(-10)" class="btn-preset danger">-10</button>
+              </div>
+            </div>
+
+            <div class="info-box" id="counterMessage" style="display:none;">
+              <i class="fas fa-info-circle"></i>
+              <p id="counterMessageText"></p>
+            </div>
+          </div>
+
+          <!-- Log Perubahan -->
+          <div class="section-card" style="margin-top:16px;">
+            <div class="section-title">
+              <i class="fas fa-history"></i> Riwayat Perubahan Counter
+            </div>
+            <div id="counterLogContainer">
+              <div class="empty-state">
+                <i class="fas fa-clock"></i>
+                <p>Belum ada perubahan</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div id="deleteModal" class="modal-overlay hidden">
+      <div class="modal-box">
+        <div class="modal-header"><h3><i class="fas fa-trash"></i> Hapus Domain</h3><button class="modal-close-btn" onclick="closeDeleteModal()"><i class="fas fa-times"></i></button></div>
+        <div class="modal-body text-center">
+          <div class="delete-icon"><i class="fas fa-exclamation-triangle"></i></div>
+          <h3>Konfirmasi Penghapusan</h3>
+          <p>Anda yakin ingin menghapus domain:</p>
+          <p class="delete-domain-name" id="deleteDomainName">-</p>
+          <div class="info-box-error"><i class="fas fa-exclamation-triangle"></i><p>Tindakan ini tidak dapat dibatalkan!</p></div>
+        </div>
+        <div class="modal-footer"><button class="btn-cancel" onclick="closeDeleteModal()">Batal</button><button class="btn-delete" id="confirmDeleteBtn"><i class="fas fa-trash"></i> Hapus Domain</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <script src="script.js?v=20260507"></script>
+</body>
+</html>
